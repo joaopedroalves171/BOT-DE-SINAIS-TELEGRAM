@@ -17,11 +17,12 @@
   },
   "homepage": "https://github.com/davidgts/botGratis#readme",
   "dependencies": {
-    "dayjs": "^1.11.5",
+    "dayjs": "^1.11.10",
     "dotenv": "^16.0.1",
+    "fs": "0.0.1-security",
     "mysql2": "^2.3.3",
-    "node-schedule": "^2.1.0",
-    "node-telegram-bot-api": "^0.58.0",
-    "sequelize": "^6.21.4"
+    "node-schedule": "^2.1.1",
+    "node-telegram-bot-api": "^0.64.0",
+    "sequelize": "^6.37.1"
   }
 }

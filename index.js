@@ -1,8 +1,3 @@
-/*--------------------------------------------------------------------*/
-/* Sistema de envio de sinais de cassino no o telegram  - Auto PILOT  */
-/*--------------------------------------------------------------------*/
-//                        by david machado                            //
-/*--------------------------------------------------------------------*/
 const TelegramBot = require('node-telegram-bot-api');
 const {Sequelize,DataTypes} = require('sequelize');
 const nodeSchedule = require('node-schedule')
@@ -78,10 +73,10 @@ bot.on('polling_error',async(error)=>{
 });
 
 //define a quantidade de sinais por horario
-const QTDSINAIS = 1;
+const QTDSINAIS = 4;
 
 //Define quantas rodadas que aguarda até ser liberado para analisar outro green 
-const RODADAS_REDALERT = 6;
+const RODADAS_REDALERT = 3;
 
 // Lista de elementos que serão atualizados no momento
 let analiser1= [];
@@ -154,7 +149,7 @@ async function capturaElementos(){
                 senderSignal(atual)
             }
             
-         }, 300);
+         }, 100);
     } catch (error) {
         console.log('ERRO CAPTURA ELEMENTOS: '+error)
         capturaElementos()
@@ -163,9 +158,9 @@ async function capturaElementos(){
 }
 
 //Rotina pra iniciar o bot
-nodeSchedule.scheduleJob('0 00 12 * * ?', async() => { 
+nodeSchedule.scheduleJob('0 07 00 * * ?', async() => { 
     if(!isStart){
-        console.log('Inicio das 12:00h')
+        console.log('Inicio das 07:00h')
         bot.sendMessage(chatId,'🤖 BOT ESTÁ LIGADO !🟢') 
         capturaElementos() 
     }
@@ -203,14 +198,14 @@ async function senderSignal(valor){
     }
     
 //[PADRÃO SINAL 2]
-/*
-1° Baixo
-2° Baixo -> Analisa
-3° Baixo -> Entrada
-4° Alto -> Green ou Gale
-5° Alto -> Green ou Gale
-6° Alto -> Green ou Red
-*/
+
+//1° Baixo
+//2° Baixo -> Analisa
+//3° Baixo -> Entrada
+//4° Alto -> Green ou Gale
+//5° Alto -> Green ou Gale
+//6° Alto -> Green ou Red
+
 
    async function sinal1(){
         if(analiser1.length === 2){
@@ -292,17 +287,17 @@ async function senderSignal(valor){
    }
 
 //[PADRÃO SINAL 2]
-/*      
- 1° Alto
- 2° Baixo
- 3° Baixo
- 4° Alto
- 5° Baixo <- Analisa
- 6° Baixo <- Entrada
- 7° Alto <- Green ou Gale
- 8° Alto <- Green ou Gale
- 9° Alto <- Green ou Red
-*/
+
+ //1° Alto
+ //2° Baixo
+ //3° Baixo
+ //4° Alto
+ //5° Baixo <- Analisa
+ //6° Baixo <- Entrada
+ //7° Alto <- Green ou Gale
+ //8° Alto <- Green ou Gale
+ //9° Alto <- Green ou Red
+
    async function sinal2(){
     if(analiser2.length === 5){
                  //Alto                      baixo               baixo                   alto                    baixo
@@ -397,18 +392,6 @@ function stopBot(){
 
       
     bot.sendMessage(chatId,'🤖 BOT FOI PARADO 🔴')
-    bot.sendMessage(chatId,'🤖 ATIVO APENAS NO GRUPO VIP ATIVO LÁ TEM MAIS DE 150 SINAIS POR DIA🟩')
-
-    let mensagem = `🤖 PRÓXIMO SINAL SÓ AMANHA AS 12H
-🚨Horário de Brasília🚨
-CASO QUEIRA OBETER O GRUPO VITALÍCIO COM +200 SINAIS DIÁRIOS, GRUPO VIP🚨⬇️
-https://autopilot.kpages.online/autopilot
-Cupom: ALUNOS`
-    bot.sendMessage(chatId,mensagem)    
-
-    clearInterval(findElementService)
-    isStart= false
-    analiser1= []
 }    
 
 // Acessa a base de dados para consultar o ultimo elemento adicionado
@@ -462,11 +445,11 @@ SINAL 4 : `+sts4
 
 //Envia a mensagem de analise de aposta para o telgram
 async function telegramsendAnalise(){
-    let msg = `🍀<b>AUTO PILOT - ROBÔ</b>🍀
+    let msg = `🍀<b>BOT AVIATOR</b>🍀
 🚨ATENÇÃO🚨
 🤞POSSÍVEL ENTRADA✈️
 Aguardem confirmação❗️
-LINK🚨➡️ : <a href=\'https://br.betano.com/casino/games/aviator/3337/\'>🔗LINK</a>`;
+LINK🚨➡️ : <a href=\'https://oceano.bet/game/spribe-aviator'>🔗LINK</a>`;
 
     let message = await bot.sendMessage(chatId,msg,{parse_mode:'HTML',disable_web_page_preview:true})
 
@@ -477,13 +460,13 @@ LINK🚨➡️ : <a href=\'https://br.betano.com/casino/games/aviator/3337/\'>�
 async function telegramsendBet(entrada,saida){
     let entrarapos = entrada+'X'
     let stop = saida+'X'
-    let msg = `🍀<b>Auto Pilot - Robô</b>🍀
+    let msg = `🍀<b>BOT AVIATOR</b>🍀
 🚨ENTRADA CONFIRMADA🚨
 Entrar após:`+entrarapos+`
 PARA EM :`+stop+`X
 Caso não de na primeira utilizar 
 Gale✅✅✅
-LINK🚨➡️ : <a href=\'https://br.betano.com/casino/games/aviator/3337/\'> <b>(AVIATOR) LINK🚨</b></a>
+LINK🚨➡️ : <a href=\'https://oceano.bet/game/spribe-aviator'> <b>(AVIATOR) LINK🚨</b></a>
     `
     let message = await bot.sendMessage(chatId,msg,{parse_mode:'HTML',disable_web_page_preview:true})
 
